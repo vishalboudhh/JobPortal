@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+Button{
+    cursor: pointer;
+}
+
+/* Global responsive styles */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure images are responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Prevent horizontal scroll on mobile */
+.container, .max-w-7xl, .max-w-6xl, .max-w-4xl, .max-w-xl {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container, .max-w-7xl, .max-w-6xl, .max-w-4xl, .max-w-xl {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container, .max-w-7xl, .max-w-6xl, .max-w-4xl, .max-w-xl {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
