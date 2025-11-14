@@ -43,8 +43,14 @@ app.use("/api/v1/application", applicationRoute);
 // Serve frontend build folder
 app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
 
-// Express 5 wildcard route MUST have a path ("*")
-app.get((req, res) => {
+// Catch-all handler: send back React's index.html file for any non-API routes
+// This must be after all API routes and static file serving
+app.use((req, res, next) => {
+  // Don't serve index.html for API routes - return 404
+  if (req.path.startsWith("/api/")) {
+    return res.status(404).json({ message: "API route not found" });
+  }
+  // For all other routes, serve index.html (client-side routing)
   res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
 });
 
