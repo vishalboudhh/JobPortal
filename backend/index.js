@@ -8,42 +8,47 @@ import companyRoute from "./routes/company.route.js";
 import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
 
-import path from 'path';
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config({});
+dotenv.config();
+
+// Fix __dirname for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3000;
+
 const app = express();
 connectDB();
 
-const _dirname = path.resolve();
-
-//Middlewares
+// Middlewares
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-const corsOptions = {
-    origin:'https://vishaljobportal.onrender.com',
-    credentials:true
-}
-app.use(cors(corsOptions));
 
+app.use(
+  cors({
+    origin: "https://vishaljobportal.onrender.com",
+    credentials: true,
+  })
+);
 
+// API routes
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/company", companyRoute);
+app.use("/api/v1/job", jobRoute);
+app.use("/api/v1/application", applicationRoute);
 
-//APIs
-app.use("/api/v1/user",userRoute);
-app.use("/api/v1/company",companyRoute);
-app.use("/api/v1/job",jobRoute);
-app.use("/api/v1/application",applicationRoute);
+// Serve frontend build folder
+app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
 
+// Express 5 wildcard route MUST have a path ("*")
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
+});
 
-app.use(express.static(path.join(_dirname,"..","frontend","dist")));
-app.get((req,res,next)=>{
-    res.sendFile(path.resolve(_dirname,"..","frontend","dist","index.html"));
-})
-
-//App listing
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
-})
-
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
