@@ -102,16 +102,16 @@ export const updateCompany = async (req, res) => {
     const updateData = { name, description, website, location }
 
     // Only process upload when multer provided a file
-    if (req.file) {
-      const fileData = getDataUri(req.file)
-      if (fileData) {
-        const myCloud = await cloudinary.uploader.upload(fileData.content)
-        updateData.logo = {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url
+        if (req.file) {
+            const fileData = getDataUri(req.file)
+            if (fileData) {
+                const myCloud = await cloudinary.uploader.upload(fileData.content)
+                // Company.schema defines `logo` as a String (URL). Store the secure URL.
+                // If you need to keep public_id as well, consider updating the schema
+                // to store an object with `{ public_id, url }`.
+                updateData.logo = myCloud.secure_url
+            }
         }
-      }
-    }
 
     const updated = await Company.findByIdAndUpdate(companyId, updateData, { new: true })
     return res.status(200).json({ success: true, message: 'Company updated', company: updated })
