@@ -59,7 +59,7 @@ const Job = ({job}) => {
           {job?.position} positions
         </Badge>
         <Badge className="text-sky-600 font-semibold bg-orange-50 hover:bg-orange-100 transition text-xs sm:text-sm" variant="ghost">
-          {job?.jobType} jobType
+          {job?.jobType} 
         </Badge>
         <Badge className="text-purple-700 font-semibold bg-purple-50 hover:bg-purple-100 transition text-xs sm:text-sm" variant="ghost">
           {job?.salary} salary
