@@ -5,7 +5,8 @@ import { singleUpload } from "../middlewares/multer.js";
 
 const router = express.Router();
 
-router.route("/register").post(register);
+// Accept multipart/form-data for optional profile file from frontend FormData
+router.route("/register").post(singleUpload, register);
 router.route("/login").post(login);
 router.route("/profile/update").post(isAuthenticated, singleUpload, updateProfile);
 router.route("/logout").get(logout);
