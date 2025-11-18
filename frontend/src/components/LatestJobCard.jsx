@@ -17,7 +17,7 @@ const LatestJobCard = ({job}) => {
           </h1>
           <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
             <MapPin className="w-4 h-4 text-gray-400" />
-            {job?.location}
+            India
           </p>
         </div>
         <img 
