@@ -13,16 +13,42 @@ const Jobs = () => {
   const [filterJobs, setFilterJobs] = useState(allJobs);
 
   useEffect(() => {
-    if (searchQuery) {
-      const filteredJobs = allJobs.filter((job) => {
-        return job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          job.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          job.location.toLowerCase().includes(searchQuery.toLowerCase()) 
-    })
-    setFilterJobs(filteredJobs)
-    } else {
-      setFilterJobs(allJobs)
+    let filtered = [...allJobs];
+
+    // Handle searchQuery which is now an object with location, jobType, salary filters
+    if (typeof searchQuery === 'object' && Object.keys(searchQuery).length > 0) {
+      const { location, jobtype, salary } = searchQuery;
+
+      if (location) {
+        filtered = filtered.filter((job) =>
+          job.location?.toLowerCase().includes(location.toLowerCase())
+        );
+      }
+
+      if (jobtype) {
+        filtered = filtered.filter((job) =>
+          job.jobType?.toLowerCase() === jobtype.toLowerCase()
+        );
+      }
+
+      if (salary) {
+        filtered = filtered.filter((job) => {
+          const jobSalary = job.salary?.toLowerCase() || "";
+          return jobSalary.includes(salary.toLowerCase());
+        });
+      }
+    } else if (typeof searchQuery === 'string' && searchQuery) {
+      // Fallback for string search
+      filtered = filtered.filter((job) => {
+        return (
+          job.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          job.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          job.location?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      });
     }
+
+    setFilterJobs(filtered);
   }, [allJobs, searchQuery])
 
   return (
