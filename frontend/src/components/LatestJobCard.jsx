@@ -21,7 +21,7 @@ const LatestJobCard = ({job}) => {
           </p>
         </div>
         <img 
-          src="https://img.icons8.com/color/48/company.png" 
+          src={job?.company?.logo} 
           alt="company logo" 
           className="w-12 h-12 object-cover rounded-full hidden sm:block"
         />
