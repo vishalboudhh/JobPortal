@@ -41,7 +41,7 @@ const Job = ({job}) => {
         </Avatar>
         <div className="flex flex-col">
           <h1 className="font-semibold text-base sm:text-lg">{job?.company?.name}</h1>
-          <p className="text-sm text-gray-600">India</p>
+          <p className="text-sm text-gray-600">{job?.location || "India"}</p>
         </div>
       </div>
 
