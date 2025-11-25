@@ -14,6 +14,10 @@ import CompanySetup from './components/admin/CompanySetup'
 import AdminJobs from "./components/admin/AdminJobs"
 import PostJob from './components/admin/PostJob'
 import Applicants from './components/admin/Applicants'
+import ProtectedRoute from './components/guards/ProtectedRoute'
+import AdminRoute from './components/guards/AdminRoute'
+import StudentRoute from './components/guards/StudentRoute'
+
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -28,45 +32,45 @@ const appRouter = createBrowserRouter([
   },
   {
     path: "/jobs",
-    element: <Jobs />
+    element: <ProtectedRoute><Jobs /></ProtectedRoute>
   },
   {
     path: "/browse",
-    element: <Browse />
+    element: <ProtectedRoute><StudentRoute><Browse /></StudentRoute></ProtectedRoute>
   },
   {
     path: "/profile",
-    element: <Profile />
+    element: <ProtectedRoute><Profile /></ProtectedRoute>
   },
   {
     path: "/description/:id",
-    element: <JobDescription />
+    element: <ProtectedRoute><JobDescription /></ProtectedRoute>
   },
 
-  //Admin routes
+  //Admin routes - Protected with AdminRoute (Recruiter only)
   {
     path:"/admin/companies",
-    element:<Companies/>
+    element:<ProtectedRoute><AdminRoute><Companies/></AdminRoute></ProtectedRoute>
   },
   {
     path:"/admin/companies/create",
-    element:<CompanyCreate/>
+    element:<ProtectedRoute><AdminRoute><CompanyCreate/></AdminRoute></ProtectedRoute>
   },
   {
     path:"/admin/companies/:id",
-    element:<CompanySetup/>
+    element:<ProtectedRoute><AdminRoute><CompanySetup/></AdminRoute></ProtectedRoute>
   },
   {
     path:"/admin/jobs",
-    element:<AdminJobs/>
+    element:<ProtectedRoute><AdminRoute><AdminJobs/></AdminRoute></ProtectedRoute>
   },
   {
     path:"/admin/jobs/create",
-    element:<PostJob/>
+    element:<ProtectedRoute><AdminRoute><PostJob/></AdminRoute></ProtectedRoute>
   },
   {
     path:"/admin/jobs/:id/applicants",
-    element:<Applicants/>
+    element:<ProtectedRoute><AdminRoute><Applicants/></AdminRoute></ProtectedRoute>
   },
 ])
 

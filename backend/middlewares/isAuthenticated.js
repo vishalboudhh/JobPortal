@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { User } from '../models/user.model.js';
 
 const isAuthenticated = async (req, res, next) => {
     try {
@@ -20,11 +21,26 @@ const isAuthenticated = async (req, res, next) => {
             })
         };
 
+        // Fetch user to get role information
+        const user = await User.findById(decode.userId).select('-password');
+        
+        if (!user) {
+            return res.status(401).json({
+                message: "User not found",
+                success: false,
+            })
+        }
+
         req.id = decode.userId;
+        req.user = user; // Attach user object including role
         next();
 
     } catch (error) {
         console.log(`Error in Auth middleware`, error);
+        return res.status(401).json({
+            message: "Authentication failed",
+            success: false,
+        })
     }
 }
 

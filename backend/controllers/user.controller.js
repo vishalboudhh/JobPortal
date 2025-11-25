@@ -100,7 +100,12 @@ export const login = async (req, res) => {
         }
 
 
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpsOnly: true, sameSite: 'strict' }).json({
+        return res.status(200).cookie("token", token, { 
+            maxAge: 1 * 24 * 60 * 60 * 1000, 
+            httpOnly: true, 
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production' // HTTPS only in production
+        }).json({
             message: `Welcome back ${user.fullname}`,
             user,
             success: true
@@ -123,6 +128,41 @@ export const logout = async (req, res) => {
         })
     } catch (error) {
         console.log(`Error in logout`, error);
+    }
+};
+
+export const getCurrentUser = async (req, res) => {
+    try {
+        const userId = req.id;
+        let user = await User.findById(userId).select('-password');
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+                success: false
+            });
+        }
+
+        user = {
+            _id: user._id,
+            fullname: user.fullname,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            role: user.role,
+            profile: user.profile
+        }
+
+        return res.status(200).json({
+            user,
+            success: true
+        });
+
+    } catch (error) {
+        console.log(`Error in getCurrentUser`, error);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false
+        });
     }
 };
 
